@@ -1,0 +1,9 @@
+packages:
+  - .
+minimumReleaseAge: 2880
+allowBuilds:
+  '@embedded-postgres/windows-x64': true
+  bcrypt: true
+  sharp: true
+  unrs-resolver: true
+
