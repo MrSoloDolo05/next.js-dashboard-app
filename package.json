@@ -3,13 +3,15 @@
   "scripts": {
     "build": "next build",
     "lint": "eslint .",
-    "db:up": "node scripts/local-db.mjs",
+    "db:up": "node --env-file=.env scripts/local-db.mjs",
     "db:seed": "node scripts/seed.mjs",
     "dev": "next dev --turbopack",
     "start": "next start"
   },
   "dependencies": {
     "@heroicons/react": "^2.2.0",
+    "@supabase/ssr": "^0.12.7",
+    "@supabase/supabase-js": "^2.117.3",
     "@tailwindcss/forms": "^0.5.10",
     "autoprefixer": "10.4.20",
     "bcrypt": "^6.0.0",

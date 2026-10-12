@@ -18,7 +18,11 @@ async function getUser(email: string): Promise<User | undefined> {
   }
 }
 
-export const { auth, signIn, signOut } = NextAuth({
+// `handlers` exposes the Auth.js REST endpoints (signin, csrf, session, callback)
+// at /api/auth/*. Without this catch-all Route Handler, proxy.ts can still
+// *read* the session, but `signIn()` from a Server Action has no endpoint to
+// POST the credentials to and every /api/auth/* request 404s.
+export const { auth, signIn, signOut, handlers } = NextAuth({
   ...authConfig,
   providers: [
     Credentials({
