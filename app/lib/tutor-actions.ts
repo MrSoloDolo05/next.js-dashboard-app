@@ -9,13 +9,13 @@ export async function fetchTutors(): Promise<{
 }> {
   const supabase = await createClient();
 
-  const { data } = await supabase.auth.getClaims();
-  const userClaims = data?.claims as JwtPayload | null;
+  const { data: authData } = await supabase.auth.getClaims();
+  const userClaims = authData?.claims as JwtPayload | null;
   if (!userClaims) {
     return { data: null, error: 'Unauthorized' };
   }
 
-  const { data, error } = await supabase
+  const { data: tutors, error } = await supabase
     .from('profiles')
     .select('id, full_name, email')
     .eq('role', 'tutor')
@@ -25,7 +25,7 @@ export async function fetchTutors(): Promise<{
     return { data: null, error: error.message };
   }
 
-  return { data: data as Tutor[], error: null };
+  return { data: tutors as unknown as Tutor[], error: null };
 }
 
 export type Tutor = {

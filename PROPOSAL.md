@@ -1,6 +1,14 @@
 # Capstone Proposal: Tutoring Centre Management Dashboard
 
-**Vercel URL:** https://tutor-dashboard-xyz.vercel.app
+**Vercel URL:** https://tutor-dashboard-xyz.vercel.app *(replace with live URL after deploy)*
+
+> What changed since proposal: Students entity shipped as proposed. Sessions
+> entity shipped as proposed (FK `student_id → students.id`). The Utilisation
+> Heatmap was simplified to a "completed sessions per month" bar so the
+> honesty checklist (zero baseline, labelled axes) holds; the Subject Demand
+> Trend became a session-status donut (same decision purpose: spot no-show
+> loss). Roles cut to admin + tutor for the two-user RLS proof; centre-manager
+> policies remain in SQL for later.
 
 ---
 

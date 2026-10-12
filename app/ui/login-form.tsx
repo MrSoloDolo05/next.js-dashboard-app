@@ -9,16 +9,21 @@ import {
 import { ArrowRightIcon } from '@heroicons/react/20/solid';
 import { Button } from '@/app/ui/button';
 import { useActionState } from 'react';
-import { authenticate } from '@/app/lib/actions';
+import { loginWithSupabase } from '@/app/lib/supabase-auth-actions';
 import { useSearchParams } from 'next/navigation';
 
 export default function LoginForm() {
   const searchParams = useSearchParams();
-  const callbackUrl = searchParams.get('callbackUrl') || '/dashboard';
+  // proxy.ts redirects signed-out /dashboard visits to /login?redirectTo=...
+  // (NextAuth used ?callbackUrl=...; Supabase flow honours redirectTo).
+  const redirectTo =
+    searchParams.get('redirectTo') ||
+    searchParams.get('callbackUrl') ||
+    '/dashboard';
   // The third tuple value `isPending` comes from useActionState and is used to
   // disable the submit button while the Server Action is in flight.
   const [errorMessage, formAction, isPending] = useActionState(
-    authenticate,
+    loginWithSupabase,
     undefined,
   );
 
@@ -69,7 +74,7 @@ export default function LoginForm() {
             </div>
           </div>
         </div>
-        <input type="hidden" name="redirectTo" value={callbackUrl} />
+        <input type="hidden" name="redirectTo" value={redirectTo} />
         <Button className="mt-4 w-full" aria-disabled={isPending}>
           Log in <ArrowRightIcon className="ml-auto h-5 w-5 text-gray-50" />
         </Button>
@@ -81,7 +86,7 @@ export default function LoginForm() {
           {errorMessage && (
             <>
               <ExclamationCircleIcon className="h-5 w-5 text-red-500" />
-              <p className="text-sm text-red-500">{errorMessage}</p>
+              <p className="text-sm text-red-500">{errorMessage.message}</p>
             </>
           )}
         </div>

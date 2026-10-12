@@ -4,6 +4,9 @@ import { fetchInvoiceById, fetchCustomers } from '@/app/lib/data';
 import { notFound } from 'next/navigation';
 import { Metadata } from 'next';
 
+// Legacy tutorial route — must not prerender at build time (no local DB).
+export const dynamic = 'force-dynamic';
+
 export const metadata: Metadata = {
   title: 'Edit Invoice',
 };

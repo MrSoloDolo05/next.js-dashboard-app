@@ -1,0 +1,5 @@
+Hook: "TutorTrack is a scheduling dashboard for tutoring centres."
+Problem: "Without it, managers can't see which subjects are growing or which slots are lost to no-shows."
+Walk: "Sign in > create student > schedule session > edit session > read both charts > sign out."
+Decision: "I chose Supabase Auth only because RLS needs auth.uid(); dual NextAuth+Supabase caused a login loop."
+Limits: "Hand-rolled charts and no realtime board yet; next is Realtime sessions, a chart library with the utilisation heatmap, and table search."

@@ -3,6 +3,9 @@ import Form from '@/app/ui/invoices/create-form';
 import Breadcrumbs from '@/app/ui/invoices/breadcrumbs';
 import { Metadata } from 'next';
 
+// Legacy tutorial route — must not prerender at build time (no local DB).
+export const dynamic = 'force-dynamic';
+
 export const metadata: Metadata = {
   title: 'Create Invoice',
 };

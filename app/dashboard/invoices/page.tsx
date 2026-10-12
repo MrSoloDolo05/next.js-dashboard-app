@@ -8,6 +8,10 @@ import { Suspense } from 'react';
 import { fetchInvoicesPages } from '@/app/lib/data';
 import { Metadata } from 'next';
 
+// Legacy tutorial route (local-Postgres invoices). Out of the demo path and
+// must not prerender at build time — no local DB on Vercel.
+export const dynamic = 'force-dynamic';
+
 export const metadata: Metadata = {
   title: 'Invoices',
 };

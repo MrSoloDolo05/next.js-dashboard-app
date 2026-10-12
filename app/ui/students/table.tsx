@@ -1,8 +1,7 @@
 import Link from 'next/link';
 import { formatDateToLocal } from '@/app/lib/utils';
-import { fetchStudents } from '@/app/lib/student-actions';
+import { fetchStudents, deleteStudent } from '@/app/lib/student-actions';
 import { CreateStudent } from '@/app/ui/students/buttons';
-import { Metadata } from 'next';
 
 export default async function StudentsTable() {
   const { data: students, error } = await fetchStudents();
@@ -87,6 +86,19 @@ export default async function StudentsTable() {
                       >
                         Edit
                       </Link>
+                      <form
+                        action={async () => {
+                          'use server';
+                          await deleteStudent(student.id);
+                        }}
+                      >
+                        <button
+                          type="submit"
+                          className="text-sm font-medium text-red-500 hover:text-red-700"
+                        >
+                          Delete
+                        </button>
+                      </form>
                     </div>
                   </td>
                 </tr>

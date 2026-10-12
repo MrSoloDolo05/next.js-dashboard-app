@@ -98,7 +98,7 @@ export async function createStudent(
     subjects: studentData.subjects || [],
     preferred_tutor_id: preferred_tutor_id || null,
     centre_id: profile.centre_id,
-    created_by: claims.sub,
+    created_by: userClaims.sub,
   });
 
   if (error) {
@@ -147,13 +147,13 @@ export async function fetchStudentById(id: string): Promise<{
 }> {
   const supabase = await createClient();
 
-  const { data } = await supabase.auth.getClaims();
-  const userClaims = data?.claims as JwtPayload | null;
+  const { data: authData } = await supabase.auth.getClaims();
+  const userClaims = authData?.claims as JwtPayload | null;
   if (!userClaims) {
     return { data: null, error: 'Unauthorized' };
   }
 
-  const { data, error } = await supabase
+  const { data: student, error } = await supabase
     .from('students')
     .select(`
       *,
@@ -170,7 +170,7 @@ export async function fetchStudentById(id: string): Promise<{
     return { data: null, error: error.message };
   }
 
-  return { data: data as Student, error: null };
+  return { data: student as unknown as Student, error: null };
 }
 
 export async function updateStudent(

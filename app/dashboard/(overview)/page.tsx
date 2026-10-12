@@ -1,12 +1,11 @@
-import CardWrapper from '@/app/ui/dashboard/cards';
-import RevenueChart from '@/app/ui/dashboard/revenue-chart';
-import LatestInvoices from '@/app/ui/dashboard/latest-invoices';
+import SessionsGrowthChart from '@/app/ui/dashboard/sessions-growth-chart';
+import SessionStatusDonut from '@/app/ui/dashboard/session-status-donut';
+import LatestSessions from '@/app/ui/dashboard/latest-sessions';
 import { lusitana } from '@/app/ui/fonts';
 import { Suspense } from 'react';
 import {
   RevenueChartSkeleton,
   LatestInvoicesSkeleton,
-  CardsSkeleton,
 } from '@/app/ui/skeletons';
 import { Metadata } from 'next';
 
@@ -14,28 +13,29 @@ export const metadata: Metadata = {
   title: 'Dashboard',
 };
 
-// Server Component (async). Each child below is wrapped in its own <Suspense>
-// boundary so Next.js can stream the HTML shell first and fill in the slow
-// parts (cards, chart, invoices) as their data resolves - no request waterfall.
+// Server Component (async). Charts stream in behind Suspense boundaries.
+// Cards/latest-invoices from the local-Postgres tutorial are out of the demo
+// path: production charts read Supabase sessions (RLS-scoped).
 export default async function Page() {
   return (
     <main>
       <h1 className={`${lusitana.className} mb-4 text-xl md:text-2xl`}>
         Dashboard
       </h1>
-      <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-4">
-        <Suspense fallback={<CardsSkeleton />}>
-          <CardWrapper />
-        </Suspense>
-      </div>
       <div className="mt-6 grid grid-cols-1 gap-6 md:grid-cols-4 lg:grid-cols-8">
         <Suspense fallback={<RevenueChartSkeleton />}>
-          <RevenueChart />
+          <SessionsGrowthChart />
         </Suspense>
         <Suspense fallback={<LatestInvoicesSkeleton />}>
-          <LatestInvoices />
+          <SessionStatusDonut />
+        </Suspense>
+      </div>
+      <div className="mt-6">
+        <Suspense fallback={<LatestInvoicesSkeleton />}>
+          <LatestSessions />
         </Suspense>
       </div>
     </main>
   );
 }
+

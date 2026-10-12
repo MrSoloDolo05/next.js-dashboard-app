@@ -1,8 +1,11 @@
 import type { NextAuthConfig } from 'next-auth';
 
-// Edge-safe configuration. This file is imported by proxy.ts (which runs on the
-// Edge runtime), so it must NOT import bcrypt, postgres or anything else that
-// requires Node.js APIs.
+// RETIRED for production: Supabase Auth (proxy.ts) is the single gate for
+// /dashboard. Keeping a NextAuth `authorized()` callback active alongside
+// proxy.ts created a dual-gate login loop: signing in with NextAuth set a
+// NextAuth cookie but no Supabase claims, so proxy.ts bounced every
+// /dashboard visit back to /login. This file is kept only so legacy imports
+// don't break the build; it no longer protects any route.
 export const authConfig = {
   pages: {
     signIn: '/login',
@@ -12,17 +15,9 @@ export const authConfig = {
     // with Node.js while this file is also used in non-Node.js environments
   ],
   callbacks: {
-    // Runs for every matched request: protects /dashboard and bounces
-    // already-authenticated users away from the login page.
-    authorized({ auth, request: { nextUrl } }) {
-      const isLoggedIn = !!auth?.user;
-      const isOnDashboard = nextUrl.pathname.startsWith('/dashboard');
-      if (isOnDashboard) {
-        if (isLoggedIn) return true;
-        return false; // Redirect unauthenticated users to login page
-      } else if (isLoggedIn) {
-        return Response.redirect(new URL('/dashboard', nextUrl));
-      }
+    // Allow every request through — proxy.ts (Supabase getClaims) enforces
+    // /dashboard protection. See proxy.ts for the real gate.
+    authorized() {
       return true;
     },
   },

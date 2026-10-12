@@ -1,7 +1,6 @@
 'use client';
 
 import {
-  UserGroupIcon,
   HomeIcon,
   DocumentDuplicateIcon,
   UserIcon,
@@ -11,16 +10,17 @@ import { usePathname } from 'next/navigation';
 import clsx from 'clsx';
 
 // Map of links to display in the side navigation.
-// Depending on the size of the application, this would be stored in a database.
+// Demo path: Home (charts) → Students (Entity 1) → Sessions (Entity 2).
+// Legacy Invoices/Customers routes still exist but are out of the demo path
+// (local-Postgres tutorial tables, not Supabase RLS data).
 const links = [
   { name: 'Home', href: '/dashboard', icon: HomeIcon },
+  { name: 'Students', href: '/dashboard/students', icon: UserIcon },
   {
-    name: 'Invoices',
-    href: '/dashboard/invoices',
+    name: 'Sessions',
+    href: '/dashboard/sessions',
     icon: DocumentDuplicateIcon,
   },
-  { name: 'Customers', href: '/dashboard/customers', icon: UserGroupIcon },
-  { name: 'Students', href: '/dashboard/students', icon: UserIcon },
 ];
 
 export default function NavLinks() {
